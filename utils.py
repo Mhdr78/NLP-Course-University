@@ -7,9 +7,16 @@
 import numpy as np
 from scipy import linalg
 from collections import defaultdict
+import docx
 
 
-# In[2]:
+# reading text from docx
+def getText(filename):
+    doc = docx.Document(filename)
+    fullText = []
+    for para in doc.paragraphs:
+        fullText.append(para.text)
+    return '\n'.join(fullText)
 
 
 def softmax(z):
@@ -25,15 +32,10 @@ def softmax(z):
     ### END CODE HERE ###
     return yhat
 
-# In[3]:
-
 
 def relu(z):
     # relu functon
     return np.maximum(z, 0)
-
-
-# In[4]:
 
 
 def get_idx(words, word2Ind):
@@ -41,9 +43,6 @@ def get_idx(words, word2Ind):
     for word in words:
         idx = idx + [word2Ind[word]]
     return idx
-
-
-# In[5]:
 
 
 def pack_idx_with_frequency(context_words, word2Ind):
@@ -57,9 +56,6 @@ def pack_idx_with_frequency(context_words, word2Ind):
         freq = freq_dict[context_words[i]]
         packed.append((idx, freq))
     return packed
-
-
-# In[6]:
 
 
 def get_vectors(data, word2Ind, V, C):
@@ -84,9 +80,6 @@ def get_vectors(data, word2Ind, V, C):
             i = 0
 
 
-# In[7]:
-
-
 def get_batches(data, word2Ind, V, C, batch_size):
     batch_x = []
     batch_y = []
@@ -98,10 +91,7 @@ def get_batches(data, word2Ind, V, C, batch_size):
             yield np.array(batch_x).T, np.array(batch_y).T
             batch_x = []
             batch_y = []
-
-
-# In[8]:
-
+            
 
 def compute_pca(data, n_components=2):
     """
@@ -137,9 +127,6 @@ def compute_pca(data, n_components=2):
     return np.dot(evecs.T, data.T).T
 
 
-# In[9]:
-
-
 def get_dict(data):
     """
     Input:
@@ -163,8 +150,6 @@ def get_dict(data):
     return word2Ind, Ind2word
 
 
-# In[ ]:
-
 def euclidean_distance(v, w):
     d = linalg.norm(v-w)
     return d
@@ -173,6 +158,27 @@ def cosine_similarity(v, w):
     c = np.dot(v,w) / (linalg.norm(v)*linalg.norm(w))
     return c
 
+
+# Define a function to find K closest words to a vector:
+def find_closest_word(word, k, embeddings):
+    
+    most_closest_words = []
+    word_emb = embeddings[word]
+    similar_word = ''
+    
+    for w in embeddings.keys():
+        if word != w:
+            # get the word embedding
+            w_emb = embeddings[w]
+            # calculating cosine similarity
+            cur_similarity = cosine_similarity(word_emb, w_emb)
+            # store the similar_word as a tuple, which contains the word and the similarity
+            similar_word = (w, cur_similarity)
+            # append each tuple to list
+            most_closest_words.append(similar_word)
+    # sort based on more similarity
+    most_closest_words.sort(key=lambda y: -y[1])
+    return most_closest_words[:k]
 
 
 
