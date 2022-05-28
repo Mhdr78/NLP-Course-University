@@ -1,0 +1,13 @@
+{
+    "embeddings": [
+      {
+        "tensorName": "My tensor",
+        "tensorShape": [
+          1000,
+          50
+        ],
+        "tensorPath": "https://gist.githubusercontent.com/Mhdr78/468061b20f7eecf6713aee852d3f62ef/raw/cdd60e8e7416fe32b400df3bb1dcda9946e59f33/vectors.tsv",
+        "metadataPath": "https://gist.githubusercontent.com/Mhdr78/568d2bd2e2410f4bf22dd40415ea4da1/raw/0169dfcc555c3ac903bf764821282beea08452d0/metadata.tsv"
+      }
+    ]
+  }
