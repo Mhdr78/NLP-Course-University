@@ -1,4 +1,3 @@
-from sklearn.metrics import euclidean_distances
 import streamlit as st
 import numpy as np
 from numpy import linalg
@@ -8,11 +7,11 @@ from sklearn.metrics.pairwise import cosine_similarity, euclidean_distances
 #     c = np.dot(v,w) / (linalg.norm(v)*linalg.norm(w))
 #     return c
 
-# def euclidean_distance(v, w):
-#     v = np.asarray(v)
-#     w = np.asarray(w)
-#     d = linalg.norm(v-w)
-#     return d
+def euclidean_distance(v, w):
+    v = np.asarray(v)
+    w = np.asarray(w)
+    d = linalg.norm(v-w)
+    return d
 
 def find_closest_word(word, k, dist_type, embeddings):
     most_closest_words = []
@@ -34,7 +33,10 @@ def find_closest_word(word, k, dist_type, embeddings):
             # append each tuple to list
             most_closest_words.append(similar_word)
     # sort based on more similarity
-    most_closest_words.sort(key=lambda y: -y[1])
+    if dist_type == "Cosine":
+        most_closest_words.sort(key=lambda y: -y[1])
+    else:
+        most_closest_words.sort(key=lambda y: y[1])
     return most_closest_words[:k]
 
 
